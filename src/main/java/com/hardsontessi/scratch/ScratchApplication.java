@@ -10,8 +10,8 @@ public class ScratchApplication {
         var ctx = SpringApplication.run(ScratchApplication.class, args);
         MyFirstService myFirstService = ctx.getBean(MyFirstService.class);
         System.out.println(myFirstService.tellAStory());
-        System.out.println(myFirstService.getCustomPropertyFromAnotherFile());
-        System.out.println(myFirstService.getCustomPropertyFromAnotherFile2());
+        System.out.println(myFirstService.getAuthor());
+        System.out.println(myFirstService.getCustomProperty());
     }
 
 }
