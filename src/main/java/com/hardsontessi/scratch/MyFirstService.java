@@ -10,10 +10,9 @@ public class MyFirstService {
     private MyFirstClass myFirstClass;
 
     @Autowired
-    public void injectInjections(@Qualifier("myThirdClass") MyFirstClass myFirstClass){
+    public void setMyFirstClass(@Qualifier("mySecondClass") MyFirstClass myFirstClass) {
         this.myFirstClass = myFirstClass;
     }
-
 
     public String tellAStory() {
         return "The dependency is saying: " + myFirstClass.sayHello();
