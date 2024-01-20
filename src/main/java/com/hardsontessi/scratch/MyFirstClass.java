@@ -1,12 +1,15 @@
 package com.hardsontessi.scratch;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class MyFirstClass {
 
+    private final String myVar;
+
+    public MyFirstClass(String myVar) {
+        this.myVar = myVar;
+    }
+
     public String sayHello() {
-        return "Hello from the MyFistClass";
+        return "Hello from the MyFistClass ==> myVar = " + myVar;
     }
 
 }
