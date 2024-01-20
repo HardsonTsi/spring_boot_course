@@ -1,0 +1,14 @@
+DB:
+  USERNAME: postgres
+  PASSWORD: admin
+  HOST: 127.0.0.1
+  PORT: 5432
+  TYPE: postgresql
+  NAME: scratchDB
+
+spring:
+  datasource:
+    username: ${DB.USERNAME}
+    password: ${DB.PASSWORD}
+    url: jdbc:${DB.TYPE}://${DB.HOST}:${DB.PORT}/${DB.NAME}
+    driver-class-name: org.postgresql.Driver
