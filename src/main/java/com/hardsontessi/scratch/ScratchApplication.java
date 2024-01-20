@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ScratchApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ScratchApplication.class, args);
+        var ctx = SpringApplication.run(ScratchApplication.class, args);
+         MyFirstClass myFirstClass = ctx.getBean(MyFirstClass.class);
+        System.out.println(myFirstClass.sayHello());
     }
 
 }
