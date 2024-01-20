@@ -1,42 +1,39 @@
 package com.hardsontessi.scratch;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.stereotype.Service;
 
 @Service
+@PropertySources({
+        @PropertySource("classpath:custom.properties"),
+        @PropertySource("classpath:custom2.properties")
+})
 public class MyFirstService {
 
-    private MyFirstClass myFirstClass;
+    private final MyFirstClass myFirstClass;
 
-    private Environment environment;
+    @Value("${repo.author}")
+    private String customPropertyFromAnotherFile;
+    @Value("${repo.author.lastname}")
+    private String customPropertyFromAnotherFile2;
 
+    public MyFirstService(@Qualifier("bean1") MyFirstClass myFirstClass) {
+        this.myFirstClass = myFirstClass;
+    }
+
+    public String getCustomPropertyFromAnotherFile2() {
+        return customPropertyFromAnotherFile2;
+    }
 
     public String tellAStory() {
         return "The dependency is saying: " + myFirstClass.sayHello();
     }
 
-    public String getJavaVersion() {
-        return environment.getProperty("java.version");
+    public String getCustomPropertyFromAnotherFile() {
+        return customPropertyFromAnotherFile;
     }
 
-    public String getOS() {
-        return environment.getProperty("os.name");
-    }
-
-    public String readProp() {
-        return environment.getProperty("repo.author");
-    }
-
-
-    @Autowired
-    public void setMyFirstClass(@Qualifier("mySecondClass") MyFirstClass myFirstClass) {
-        this.myFirstClass = myFirstClass;
-    }
-
-    @Autowired
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
-    }
 }
