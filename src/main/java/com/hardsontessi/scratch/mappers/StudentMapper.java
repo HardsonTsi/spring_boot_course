@@ -11,6 +11,9 @@ public class StudentMapper {
 
     public Student toStudent(StudentDTO studentDTO) {
 
+        if (studentDTO == null)
+            throw new NullPointerException("StudentDTO cannot be null");
+
         var student = new Student();
 
         student.setLastName(studentDTO.lastName());
@@ -20,6 +23,7 @@ public class StudentMapper {
 
         var school = new School();
         school.setId(studentDTO.schoolId());
+        student.setSchool(school);
 
         return student;
 
