@@ -21,7 +21,7 @@ public class StudentService {
         this.studentMapper = studentMapper;
     }
 
-    public StudentResponseDTO post(StudentDTO studentDTO) {
+    public StudentResponseDTO saveStudent(StudentDTO studentDTO) {
         var student = studentMapper.toStudent(studentDTO);
         var savedStudent = studentRepository.save(student);
         return studentMapper.toStudentResponseDTO(savedStudent);

@@ -22,7 +22,7 @@ public class StudentController {
     public StudentResponseDTO post(
             @Valid @RequestBody StudentDTO studentDTO
     ) {
-        return studentService.post(studentDTO);
+        return studentService.saveStudent(studentDTO);
     }
 
     @GetMapping("/students")
