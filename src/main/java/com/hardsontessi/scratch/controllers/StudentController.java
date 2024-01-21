@@ -1,6 +1,9 @@
 package com.hardsontessi.scratch.controllers;
 
+import com.hardsontessi.scratch.dtos.StudentDTO;
+import com.hardsontessi.scratch.dtos.StudentResponseDTO;
 import com.hardsontessi.scratch.entities.Student;
+import com.hardsontessi.scratch.repositories.SchoolRepository;
 import com.hardsontessi.scratch.repositories.StudentReposity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -9,15 +12,45 @@ import java.util.List;
 
 @RestController
 public class StudentController {
-    public StudentController(StudentReposity studentReposity) {
-        this.studentReposity = studentReposity;
-    }
 
     private final StudentReposity studentReposity;
+    private final SchoolRepository schoolRepository;
+
+    public StudentController(StudentReposity studentReposity, SchoolRepository schoolRepository) {
+        this.studentReposity = studentReposity;
+        this.schoolRepository = schoolRepository;
+    }
+
+    private Student toStudent(StudentDTO studentDTO) {
+
+        var student = new Student();
+
+        student.setLastName(studentDTO.lastName());
+        student.setFirstName(studentDTO.firstName());
+        student.setEmail(studentDTO.email());
+        student.setAge(studentDTO.age());
+
+        var school = schoolRepository.findById(studentDTO.schoolId()).orElse(null);
+        student.setSchool(school);
+
+        return student;
+
+    }
+
+    private StudentResponseDTO toStudentResponseDTO(Student student) {
+        return new StudentResponseDTO(
+                student.getLastName(),
+                student.getFirstName(),
+                student.getEmail(),
+                student.getAge()
+        );
+    }
 
     @PostMapping("/students")
-    public Student post(@RequestBody Student student) {
-        return studentReposity.save(student);
+    public StudentResponseDTO post(@RequestBody StudentDTO studentDTO) {
+        var student = toStudent(studentDTO);
+        var savedStudent = studentReposity.save(student);
+        return toStudentResponseDTO(savedStudent);
     }
 
     @GetMapping("/students")

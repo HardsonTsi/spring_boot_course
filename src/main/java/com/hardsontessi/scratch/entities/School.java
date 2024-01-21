@@ -13,14 +13,13 @@ import java.util.List;
 public class School {
 
 
+    @OneToMany(mappedBy = "school")
+    @JsonManagedReference
+    List<Student> students = new ArrayList<>();
     @Id
     @GeneratedValue
     private Integer id;
     private String name;
-
-    @OneToMany(mappedBy = "school")
-    @JsonManagedReference
-    List<Student> students = new ArrayList<>();
 
     public School() {
     }
