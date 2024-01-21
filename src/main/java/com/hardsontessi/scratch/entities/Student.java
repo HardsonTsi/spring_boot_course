@@ -39,7 +39,7 @@ public class Student {
     )
     private StudentProfile studentProfile;
 
-    public Student(Integer id, String firstName, String lastName, String email, int age) {
+    public Student(Integer id, String lastName, String firstName, String email, int age) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

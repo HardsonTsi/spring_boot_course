@@ -12,6 +12,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class StudentServiceTest {
 
     @InjectMocks
@@ -81,6 +87,115 @@ class StudentServiceTest {
 
         Mockito.verify(studentMapper, Mockito.times(1))
                 .toStudentResponseDTO(savedStudent);
+
+    }
+
+    @Test
+    public void shouldReturnAllStudent() {
+
+
+        List<Student> students = new ArrayList<>();
+
+        students.add(new Student(
+                null,
+                "TESSI",
+                "Hardson",
+                "hardsontessi2@gmail.com",
+                21
+        ));
+
+        Mockito.when(studentRepository.findAll())
+                .thenReturn(students);
+
+        Mockito.when(studentMapper.toStudentResponseDTO(Mockito.any(Student.class)))
+                .thenReturn(new StudentResponseDTO(
+                        "TESSI",
+                        "Hardson",
+                        "hardsontessi2@gmail.com",
+                        21
+                ));
+
+        List<StudentResponseDTO> responseDTOs = studentService.findAllStudents();
+
+        assertEquals(students.size(), responseDTOs.size());
+
+        Mockito.verify(studentRepository, Mockito.times(1))
+                .findAll();
+
+    }
+
+    @Test
+    public void shoudReturnStudentById() {
+
+        Integer id = 1;
+
+        Student student = new Student(
+                null,
+                "TESSI",
+                "Hardson",
+                "hardsontessi2@gmail.com",
+                21
+        );
+
+        Mockito.when(studentRepository.findById(id))
+                .thenReturn(Optional.of(student));
+
+        Mockito.when(studentMapper.toStudentResponseDTO(Mockito.any(Student.class)))
+                .thenReturn(new StudentResponseDTO(
+                        "TESSI",
+                        "Hardson",
+                        "hardsontessi2@gmail.com",
+                        21
+                ));
+
+
+        StudentResponseDTO dto = studentService.findStudentById(id);
+
+        assertEquals(dto.lastName(), student.getLastName());
+        assertEquals(dto.firstName(), student.getFirstName());
+        assertEquals(dto.email(), student.getEmail());
+
+        Mockito.verify(studentRepository, Mockito.times(1))
+                .findById(id);
+
+        Mockito.verify(studentMapper, Mockito.times(1))
+                .toStudentResponseDTO(student);
+
+
+    }
+
+    @Test
+    public void shouldReturnStudentsByName() {
+
+        String lastName = "TESSI";
+
+        List<Student> students = new ArrayList<>();
+
+        students.add(new Student(
+                null,
+                "TESSI",
+                "Hardson",
+                "hardsontessi2@gmail.com",
+                21
+        ));
+
+        Mockito.when(studentRepository.findAllByLastNameContaining(lastName))
+                .thenReturn(students);
+
+        Mockito.when(studentMapper.toStudentResponseDTO(Mockito.any(Student.class)))
+                .thenReturn(new StudentResponseDTO(
+                        "TESSI",
+                        "Hardson",
+                        "hardsontessi2@gmail.com",
+                        21
+                ));
+
+        var responseDTOs = studentService.findStudentsByName(lastName);
+
+        assertEquals(students.size(), responseDTOs.size());
+
+        Mockito.verify(studentRepository, Mockito.times(1))
+                .findAllByLastNameContaining(lastName);
 
     }
 
