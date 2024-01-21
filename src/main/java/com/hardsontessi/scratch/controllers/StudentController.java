@@ -2,9 +2,7 @@ package com.hardsontessi.scratch.controllers;
 
 import com.hardsontessi.scratch.dtos.StudentDTO;
 import com.hardsontessi.scratch.dtos.StudentResponseDTO;
-import com.hardsontessi.scratch.entities.Student;
-import com.hardsontessi.scratch.repositories.SchoolRepository;
-import com.hardsontessi.scratch.repositories.StudentReposity;
+import com.hardsontessi.scratch.services.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,65 +11,37 @@ import java.util.List;
 @RestController
 public class StudentController {
 
-    private final StudentReposity studentReposity;
-    private final SchoolRepository schoolRepository;
+    private final StudentService studentService;
 
-    public StudentController(StudentReposity studentReposity, SchoolRepository schoolRepository) {
-        this.studentReposity = studentReposity;
-        this.schoolRepository = schoolRepository;
-    }
-
-    private Student toStudent(StudentDTO studentDTO) {
-
-        var student = new Student();
-
-        student.setLastName(studentDTO.lastName());
-        student.setFirstName(studentDTO.firstName());
-        student.setEmail(studentDTO.email());
-        student.setAge(studentDTO.age());
-
-        var school = schoolRepository.findById(studentDTO.schoolId()).orElse(null);
-        student.setSchool(school);
-
-        return student;
-
-    }
-
-    private StudentResponseDTO toStudentResponseDTO(Student student) {
-        return new StudentResponseDTO(
-                student.getLastName(),
-                student.getFirstName(),
-                student.getEmail(),
-                student.getAge()
-        );
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     @PostMapping("/students")
     public StudentResponseDTO post(@RequestBody StudentDTO studentDTO) {
-        var student = toStudent(studentDTO);
-        var savedStudent = studentReposity.save(student);
-        return toStudentResponseDTO(savedStudent);
+
+        return studentService.post(studentDTO);
     }
 
     @GetMapping("/students")
-    public List<Student> findAllStudents() {
-        return studentReposity.findAll();
+    public List<StudentResponseDTO> findAllStudents() {
+        return studentService.findAllStudents();
     }
 
     @GetMapping("/students/{id}")
-    public Student findStudentById(@PathVariable("id") Integer id) {
-        return studentReposity.findById(id).orElse(null);
+    public StudentResponseDTO findStudentById(@PathVariable("id") Integer id) {
+        return studentService.findStudentById(id);
     }
 
     @GetMapping("/students/search/{lastName}")
-    public List<Student> findStudentsByName(@PathVariable("lastName") String lastName) {
-        return studentReposity.findAllByLastNameContaining(lastName);
+    public List<StudentResponseDTO> findStudentsByName(@PathVariable("lastName") String lastName) {
+        return studentService.findStudentsByName(lastName);
     }
 
     @DeleteMapping("/students/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteStudentById(@PathVariable("id") Integer id) {
-        studentReposity.deleteById(id);
+        studentService.deleteStudentById(id);
     }
 
 }
