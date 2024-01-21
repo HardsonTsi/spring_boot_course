@@ -3,6 +3,7 @@ package com.hardsontessi.scratch.controllers;
 import com.hardsontessi.scratch.dtos.StudentDTO;
 import com.hardsontessi.scratch.dtos.StudentResponseDTO;
 import com.hardsontessi.scratch.services.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,9 @@ public class StudentController {
     }
 
     @PostMapping("/students")
-    public StudentResponseDTO post(@RequestBody StudentDTO studentDTO) {
-
+    public StudentResponseDTO post(
+            @Valid @RequestBody StudentDTO studentDTO
+    ) {
         return studentService.post(studentDTO);
     }
 
@@ -29,18 +31,24 @@ public class StudentController {
     }
 
     @GetMapping("/students/{id}")
-    public StudentResponseDTO findStudentById(@PathVariable("id") Integer id) {
+    public StudentResponseDTO findStudentById(
+            @PathVariable("id") Integer id
+    ) {
         return studentService.findStudentById(id);
     }
 
     @GetMapping("/students/search/{lastName}")
-    public List<StudentResponseDTO> findStudentsByName(@PathVariable("lastName") String lastName) {
+    public List<StudentResponseDTO> findStudentsByName(
+            @PathVariable("lastName") String lastName
+    ) {
         return studentService.findStudentsByName(lastName);
     }
 
     @DeleteMapping("/students/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteStudentById(@PathVariable("id") Integer id) {
+    public void deleteStudentById(
+            @PathVariable("id") Integer id
+    ) {
         studentService.deleteStudentById(id);
     }
 

@@ -19,7 +19,9 @@ public class SchoolController {
     }
 
     @PostMapping("/schools")
-    public SchoolDTO create(@RequestBody SchoolDTO schoolDTO) {
+    public SchoolDTO create(
+            @RequestBody SchoolDTO schoolDTO
+    ) {
         return schoolService.create(schoolDTO);
     }
 
